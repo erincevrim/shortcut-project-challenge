@@ -1,1 +1,26 @@
-
+spring:
+  application:
+    name: url-shortener
+  datasource:
+    url: jdbc:h2:mem:shortener
+    username: sa
+    password: password
+    driver-class-name: org.h2.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  h2:
+    console:
+      enabled: false
+---
+server:
+  port: 8787
+---
+token:
+  sign:
+    key: 413F4428472B4B625999URLSHORTENER999EEI99926452948404D6351

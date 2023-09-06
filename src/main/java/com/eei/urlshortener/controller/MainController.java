@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/rest/")
+@RequestMapping("/rest")
 @AllArgsConstructor
 public class MainController {
     @GetMapping(value = "/health-check")
