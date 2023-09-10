@@ -106,7 +106,7 @@ java -jar ./UrlShortener-1.0.jar
    * **Reason**: Easy to maintain libraries and run the application.
 
 #### Potential Architecture Diagram
-![](.\diagram.png)
+![](./diagram.png)
  <br/>*Dashed ones have not been implemented. 
 
 <br/>
