@@ -12,9 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.EntityExchangeResult;
-import org.springframework.test.web.reactive.server.FluxExchangeResult;
 import org.springframework.test.web.reactive.server.WebTestClient;
-import reactor.core.publisher.Flux;
 
 @AutoConfigureWebTestClient(timeout = "36000")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -64,13 +62,13 @@ class ShortUrlShortenerApplicationTests {
     final String signUpUrl = "http://localhost:" + port + "/rest/auth/sign-up";
     final String body = "{\"username\": \"erincevrim@test.com\",\"password\": \"testtest\"}";
     webTestClient
-            .post()
-            .uri(signUpUrl)
-            .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(body)
-            .exchange()
-            .expectStatus()
-            .is5xxServerError();
+        .post()
+        .uri(signUpUrl)
+        .contentType(MediaType.APPLICATION_JSON)
+        .bodyValue(body)
+        .exchange()
+        .expectStatus()
+        .is5xxServerError();
   }
 
   @Test
@@ -79,13 +77,13 @@ class ShortUrlShortenerApplicationTests {
     final String signInUrl = "http://localhost:" + port + "/rest/auth/sign-in";
     final String body = "{\"username\": \"erincevrim2@test.com\",\"password\": \"testtest\"}";
     webTestClient
-            .post()
-            .uri(signInUrl)
-            .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(body)
-            .exchange()
-            .expectStatus()
-            .is5xxServerError();
+        .post()
+        .uri(signInUrl)
+        .contentType(MediaType.APPLICATION_JSON)
+        .bodyValue(body)
+        .exchange()
+        .expectStatus()
+        .is5xxServerError();
   }
 
   @Test
@@ -139,29 +137,27 @@ class ShortUrlShortenerApplicationTests {
     final String signInUrl = "http://localhost:" + port + "/rest/auth/sign-in";
     final String body = "{\"username\": \"erincevrim@test.com\",\"password\": \"testtest\"}";
     EntityExchangeResult<AuthenticationResponse> response =
-            webTestClient
-                    .post()
-                    .uri(signInUrl)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .bodyValue(body)
-                    .exchange()
-                    .expectStatus()
-                    .is2xxSuccessful()
-                    .expectBody(AuthenticationResponse.class)
-                    .returnResult();
+        webTestClient
+            .post()
+            .uri(signInUrl)
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(body)
+            .exchange()
+            .expectStatus()
+            .is2xxSuccessful()
+            .expectBody(AuthenticationResponse.class)
+            .returnResult();
 
     String token = response.getResponseBody().getToken();
 
     final String shortenUrl = "http://localhost:" + port + "/r/test";
 
     webTestClient
-            .get()
-            .uri(shortenUrl)
-            .header("Authorization", "Bearer " + token)
-            .exchange()
-            .expectStatus()
-            .is5xxServerError();
+        .get()
+        .uri(shortenUrl)
+        .header("Authorization", "Bearer " + token)
+        .exchange()
+        .expectStatus()
+        .is5xxServerError();
   }
-
-
 }
