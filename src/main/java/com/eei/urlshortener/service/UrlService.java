@@ -32,10 +32,10 @@ public class UrlService {
   }
 
   public String getShortenUrl(String key) throws UrlRecordNotFoundException {
-    log.info("Ull retrieve operation started.");
+    log.info("Url retrieve operation started.");
     ShortUrl shortUrl =
         urlRepository.findUrlByKey(key).orElseThrow(() -> new UrlRecordNotFoundException(key));
-    log.info("Ull retrieve operation finished.");
+    log.info("Url retrieve operation finished.");
     return shortUrl.getUrl();
   }
 }

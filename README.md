@@ -1,65 +1,134 @@
 # The Shortcutter's Coding Challenge
-
-![This is an image](./shortcut.jpg)
-
-Hi :wave:
-
-This document describes the challenge for those interested in working with us. As you may have guessed, it revolves around the backend. :tada:
-
 ## URL Shortener
-Develop a service that lets users create short URLs (like Bitly, Rebrandly, etc.) for their original links.
 
-Consider this as MVP that is ready for deployment, but try to keep in mind future maintenance and improvements.
-Don't spend too much time on perfecting it, as long as you can discuss the choices you made, what parts could be improved, etc.
+<!-- TOC -->
+* [The Shortcutter's Coding Challenge](#the-shortcutters-coding-challenge)
+  * [URL Shortener](#url-shortener)
+    * [Solution](#solution)
+    * [How to Run](#how-to-run)
+      * [Build an executable JAR -maven](#build-an-executable-jar--maven)
+      * [Run application with jar](#run-application-with-jar)
+      * [Api Test](#api-test)
+    * [Technical choices and architecture](#technical-choices-and-architecture)
+      * [Language](#language)
+      * [Database](#database)
+      * [Other](#other)
+      * [Basic Architecture Diagram](#basic-architecture-diagram)
+    * [Trade-Offs](#trade-offs)
+    * [Skipped Features](#skipped-features-)
+<!-- TOC -->
 
-## Functional requirements
 
-- Service should let users register a new account and authenticate themselves.
-- Service should let authenticated users create shortened URLs.
-- Service should let any user use shortened URLs (e.g., follow redirects to original URLs).
+### Solution
+* REST Api:
+  * Spring Boot framework is used for creating REST Api.
+* Database:
+  * H2 Database
+* Authentication:
+  * JWT Token is used for authentication.
+* Url Hashing
+  * Google Murmur3 32 bit hashing is used for shortening urls.
+    <br/>[Murmur Hash Wiki](https://en.wikipedia.org/wiki/MurmurHash)
+* Testing
+  * Junit
 
-## Technical requirements
+<br/>
 
-- Service has to serve requests over HTTP API.
-- We don't expect UI for this task.
-- User registration could be very simple with just a login(email) and password.
-- You can use any tech solution for storing data but consider that your project has to be easy to launch. For example, if you use any DB consider including deploy scripts or containerization scripts.
-- The same rule for dependencies and libraries. If you use packages that other people are unlikely to have, consider including deploy or containerization scripts.
+### How to Run
+#### Build an executable JAR -maven
+```maven
+mvn clean package spring-boot:repackage
+java -jar target/UrlShortener-1.0.jar
+```
 
-## The README
+#### Run application with jar
+```
+java -jar ./UrlShortener-1.0.jar
+```
 
-Please include README file to your project. Hopefully it will contain following information:
+#### Api Test
+* [Postman Collection](./docs/Url%20Shortener.postman_collection.json)
+* Sign Up
+  * [http://localhost:8787/rest/auth/sign-up](http://localhost:8787/rest/auth/sign-up) [POST]
+```json
+{
+  "username": "erincevrim@test.com",
+  "password": "testtest"
+}
+```
+<br/>
 
-- Start from the task and solution description.
-- Include instructions how to run or deploy your solution.
-- Describe your technical choices and architecture.
-- Add details about trade-offs you have made
-- Add details about things and features you have skipped, or you would like to change if you have additional time for this project.
+* Sign In
+  * [http://localhost:8787/rest/auth/sign-in](http://localhost:8787/rest/auth/sign-in) [POST]
+```json
+{
+  "username": "erincevrim@test.com",
+  "password": "testtest"
+}
+```
+<br/>
 
-## Handing over for review
+* Url Shortener
+  * [http://localhost:8787/r](http://localhost:8787/r) [POST]
+```json
+{
+  "url": "https://www.google.com"
+}
+```
+<br/>
 
-Please build the project in an open repository on GitHub and deliver the coding challenge via link to the repository.
+* Url Shortened Url
+  * [http://localhost:8787/r/{KEY}](http://localhost:8787/r/<KEY>) [GET]
 
-## The Review
 
-During the review process we'll look at:
+* Health Check
+  * [http://localhost:8787/rest/health-check](http://localhost:8787/rest/health-check) [GET]
 
-- We've been able to run your project.
-- Your VCS history, with hopefully more than 1 commit
-- The project structure.
-- The code architecture.
-- Unit & integration tests.
-- Good coding practices.
-- Consistent coding style and formatting
-- Names and naming conventions.
-- Good use of comments.
-- Lint warnings and code smells.
 
-## The End
+<br/>
 
-We don't like goodbyes, so why not stay in touch? Follow us on LinkedIn
-[:norway:](https://no.linkedin.com/company/shortcut-as)
-[:denmark:](https://www.linkedin.com/company/shortcut-global/)
-[:romania:](https://www.linkedin.com/company/shortcut-bucharest/)
-[:sweden:](https://www.linkedin.com/company/shortcut-sweden)
-We also appreciate any feedback you may have regarding this coding assignment, good or bad. Send an email to [post@shortcut.no](mailto:post@shortcut.no) and let us know how we're doing!
+### Technical choices and architecture
+
+#### Language
+ * Java / Spring Boot Framework 
+   * **Reason**: My main experience is on Java and Spring Boot so I have chosen these to handle this assignment.
+ 
+
+#### Database
+ * H2 Database
+   * **Reason**: H2 Database is embedded and in-memory database, I have chosen this DB, to run the application without any DB setup and not spend time on creating & hosting DB. 
+   
+
+#### Other
+ * Murmur Hash
+   * **Reason**: Murmur is simple, has good performance and has good collision resistance. 
+ * Maven
+   * **Reason**: Easy to maintain libraries and run the application.
+
+#### Potential Architecture Diagram
+![](.\diagram.png)
+ <br/>*Dashed ones have not been implemented. 
+
+<br/>
+
+### Trade-Offs
+ * No stand alone DB:
+   * Each time you run the application, DB will be created from scratch so you need to create user and urls again.
+ 
+ * Exception Handling & Error Messages
+   * General exception handling has been implemented to comply with the specified time period
+
+<br/>
+
+### Features Improvement
+ * Host Application in the cloud.
+ * CI/CD integration
+ * Exception Handling & Error Messages
+   * Error codes will be seperated for custom exceptions that front-end will handle it.
+   * Language localization can be added for api error messages.
+ * User specific Shortened Urls
+   * In current implementation if same urls are requested by different users, output will be same but it can be user specific.
+ * Email validation for username.
+ * Custom url hashing algorithm can be implemented.
+ * Serverless Infrastructure 
+   
