@@ -9,7 +9,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 
 @AutoConfigureWebTestClient(timeout = "36000")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class UrlShortenerApplicationTests {
+class ShortUrlShortenerApplicationTests {
 
     @Autowired
     private WebTestClient webTestClient;
